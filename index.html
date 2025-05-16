@@ -253,33 +253,35 @@
 <!-- ... restante do conteúdo do site ... -->
 
 <script>
-document.getElementById('contactForm').addEventListener('submit', async function (e) {
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    const statusText = document.getElementById('status');
-    statusText.textContent = 'Enviando...';
 
-    const formData = {
-        nome: this.nome.value,
-        email: this.email.value,
-        mensagem: this.mensagem.value
+    const form = e.target;
+    const data = {
+        nome: form.nome.value,
+        email: form.email.value,
+        mensagem: form.mensagem.value
     };
 
     try {
-        const response = await fetch('/api/send-message', {
+        const response = await fetch('/api/sendMessage', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
 
         const result = await response.json();
-        if (result.success) {
-            statusText.textContent = 'Mensagem enviada com sucesso!';
-            this.reset();
+
+        if (response.ok && result.success) {
+            alert('Mensagem enviada com sucesso!');
+            form.reset();
         } else {
-            statusText.textContent = 'Erro ao enviar mensagem.';
+            alert(result.error || 'Erro ao enviar mensagem.');
         }
     } catch (err) {
-        statusText.textContent = 'Erro de rede ou servidor.';
+        alert('Erro ao enviar mensagem. Tente novamente mais tarde.');
     }
 });
 </script>
