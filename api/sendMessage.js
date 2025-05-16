@@ -11,7 +11,6 @@ async function sendMessageHandler(req, res) {
     const chatId = process.env.TELEGRAM_CHAT_ID;
 
     if (!telegramBotToken || !chatId) {
-        console.error('Erro: Variáveis de ambiente não configuradas corretamente.');
         return res.status(500).json({
             success: false,
             error: 'Configuração inválida. Verifique as variáveis de ambiente.',
@@ -32,13 +31,9 @@ async function sendMessageHandler(req, res) {
 
         res.status(200).json({ success: true, data: response.data });
     } catch (error) {
-        console.error('Erro ao enviar mensagem para o Telegram:', {
-            message: error.message,
-            response: error.response?.data,
-        });
         res.status(500).json({
             success: false,
-            error: 'Falha ao enviar mensagem para o Telegram. Verifique os logs.',
+            error: 'Falha ao enviar mensagem para o Telegram.',
         });
     }
 }
